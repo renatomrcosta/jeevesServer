@@ -6,10 +6,10 @@ As basically as I can put it, we have a global Queue of Strings in memory, and w
 
 TODO - Write here a sample of the input JSON and the expected Message result.
 
-#Deployment
+# Deployment
 There is no CI in place. If you compile a new version of Jeeves Server, send me the generated JAR so I can upload it to AWS.
 
-##To be developed
+## To be developed
 * Change the ul tag for an ol tag
 * Add back a check for /dequeue in order to have only the actual user in line dequeued.
 * Add a /Kick handler to boot queue stragglers 
