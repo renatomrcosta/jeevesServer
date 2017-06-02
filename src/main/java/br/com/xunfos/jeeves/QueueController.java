@@ -47,8 +47,11 @@ public class QueueController {
         final StringBuilder sb = new StringBuilder();
         mergeQueue.poll();
         sb.append(String.format("<p>%s has merged successfully!</p>", user));
-        sb.append(String.format("<p>Good job %s! Here, take this <img src=\"%s\">!</p>", user, "https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/620675/money-1486545160.gif"));
-        sb.append(printQueue());
+        if(mergeQueue.size() > 0){
+            sb.append(String.format("<p>It's %s's turn!</p>", mergeQueue.peek()));
+        }
+        //sb.append(String.format("<p>Good job %s! Here, take this <img src=\"%s\">!</p>", user, "https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/620675/money-1486545160.gif"));
+        //sb.append(printQueue());
         response.setMessage(sb.toString());
         return response;
     }
@@ -78,7 +81,7 @@ public class QueueController {
         }
         mergeQueue.add(user);
 
-        sb.append(printQueue());
+        //sb.append(printQueue());
         response.setMessage(sb.toString());
         return response;
     }
@@ -87,14 +90,14 @@ public class QueueController {
         final StringBuilder sb = new StringBuilder();
         sb.append("<p>The queue currently looks like this: </p>");
         if (mergeQueue.size() > 0) {
-            sb.append("<ul>");
+            sb.append("<ol>");
             mergeQueue
                     .forEach(user -> {
                         sb.append("<li>");
                         sb.append(user);
                         sb.append("</li>");
                     });
-            sb.append("</ul>");
+            sb.append("</ol>");
         } else {
             sb.append(String.format("<p>The merge queue is empty! <img src=\"%s\" /></p>", "https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/620675/yayyyyy-1486545159.gif"));
         }
