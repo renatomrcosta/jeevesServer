@@ -1,4 +1,4 @@
-package br.com.xunfos.jeeves.DTO;
+package br.com.xunfos.jeeves.dto;
 
 /**
  * Created by rrc on 31/05/2017.
