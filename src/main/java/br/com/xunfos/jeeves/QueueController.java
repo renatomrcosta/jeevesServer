@@ -18,78 +18,137 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
+/**
+ * Controller of the merging queue, please don´t lose it!
+ */
 @RestController
 public class QueueController {
     private final Map<String, Queue> queueCollection = new HashMap<>();
 
+    /**
+     * Emergency nutrition for when you are doing overtime and is out of food.
+     *
+     * @param jsonRequest
+     * @return
+     */
     @RequestMapping(value = "/banana", method = RequestMethod.POST)
     public ResponseDTO banana(@RequestBody String jsonRequest) {
         final RequestDTO request = readRequest(jsonRequest);
-        final ResponseDTO response = new ResponseDTO();
-        response.setMessage(String.format("%ss wants Banana! <img src=\"%s\"/>", request.getUsername(), "http://uploads.neatorama.com/images/posts/265/68/68265/1388798520-0.jpg"));
-        return response;
+        return ResponseDTO.builder()
+                .message(String.format("%ss wants Banana! <img src=\"%s\"/>", request.getUsername(),
+                        "http://uploads.neatorama.com/images/posts/265/68/68265/1388798520-0.jpg"))
+                .build();
     }
 
+    /**
+     * Programmers just wanna have fun!!!
+     *
+     * @param jsonRequest
+     * @return
+     */
     @RequestMapping(value = "/dance", method = RequestMethod.POST)
     public ResponseDTO dance(@RequestBody String jsonRequest) {
-        final ResponseDTO response = new ResponseDTO();
-        response.setMessage("https://www.youtube.com/watch?v=uKjbQ0m43b8");
-        return response;
+        return ResponseDTO.builder()
+                .message("https://www.youtube.com/watch?v=uKjbQ0m43b8")
+                .build();
     }
 
+    /**
+     * Add user do merging queue.
+     *
+     * @param jsonRequest
+     * @return
+     */
     @RequestMapping(value = "/queue", method = RequestMethod.POST)
     public ResponseDTO queueUser(@RequestBody String jsonRequest) {
-        final RequestDTO request = readRequest(jsonRequest);
-        return queue(request);
+        return queue(readRequest(jsonRequest));
     }
 
+    /**
+     * Remove current merging user from the queue or complain about spamming the chat.
+     *
+     * @param jsonRequest
+     * @return
+     */
     @RequestMapping(value = "/dequeue", method = RequestMethod.POST)
     public ResponseDTO dequeue(@RequestBody String jsonRequest) {
-        final ResponseDTO response = new ResponseDTO();
-        final RequestDTO request = readRequest(jsonRequest);
         final StringBuilder sb = new StringBuilder();
-        final Queue mergeQueue = getQueue(request);
-        mergeQueue.poll();
-        sb.append(String.format("<p>%s has merged successfully!</p>", request.getUsername()));
-        if(mergeQueue.size() > 0){
+        final Queue mergeQueue = getQueue(readRequest(jsonRequest));
+        final String mergingUser = (String) mergeQueue.poll();
+        if (mergingUser == null) {
+            sb.append(String.format("<p>There is no merging in process, %s STOP SPAMMING!!!!</p>", readRequest(jsonRequest).getUsername()));
+        } else {
+            sb.append(String.format("<p>%s has merged successfully!</p>", mergingUser));
+        }
+        if (mergeQueue.size() > 0) {
             sb.append(String.format("<p>It's %s's turn!</p>", mergeQueue.peek()));
         }
         //sb.append(String.format("<p>Good job %s! Here, take this <img src=\"%s\">!</p>", user, "https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/620675/money-1486545160.gif"));
         //sb.append(printQueue());
-        response.setMessage(sb.toString());
-        return response;
+        return ResponseDTO.builder()
+                .message(sb.toString())
+                .build();
     }
 
+    /**
+     * Show the current status of the queue.
+     *
+     * @param jsonRequest
+     * @return
+     */
     @RequestMapping(value = "/status", method = RequestMethod.POST)
-    public ResponseDTO ststus(@RequestBody String jsonRequest) {
-        final RequestDTO request = readRequest(jsonRequest);
-        final ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setMessage(printQueue(request));
-        return responseDTO;
+    public ResponseDTO status(@RequestBody String jsonRequest) {
+        return ResponseDTO.builder()
+                .message(printQueue(readRequest(jsonRequest)))
+                .build();
     }
 
+    /**
+     * Kick the user that´s taking too long to finish his merging.
+     *
+     * @param jsonRequest
+     * @return
+     */
+    @RequestMapping(value = "/kick", method = RequestMethod.POST)
+    public ResponseDTO kickMergingUser(@RequestBody String jsonRequest) {
+        final StringBuilder sb = new StringBuilder();
+        final Queue mergeQueue = getQueue(readRequest(jsonRequest));
+        final String mergingUser = (String) mergeQueue.poll();
+        if(mergingUser == null){
+            sb.append(String.format("<p>%s stop trying to brake jeeves! </p>", readRequest(jsonRequest).getUsername()));
+        }else{
+            sb.append(String.format("<p>%s you were too slow, you had your change, now you´re being kicked out!! <img src=\"%s\" /></p>", mergingUser,
+                    "http://metropolitanafm.com.br/wp-content/uploads/2015/09/30-Frases-de-Chaves-e-Chapolin-e-fotos-5.gif"));
+        }
+        return ResponseDTO.builder()
+                .message(sb.toString())
+                .build();
+    }
+
+    /**
+     * When you fucked-up your typing, Kevin takes the blame.
+     *
+     * @return
+     */
     @RequestMapping(value = "/donce", method = RequestMethod.POST)
     public ResponseDTO donce() {
-        final ResponseDTO responseDTO = new ResponseDTO();
-        responseDTO.setMessage("Really Kevin? donce again? This isn't a Blizzard game");
-        return responseDTO;
+        return ResponseDTO.builder().message("Really Kevin? donce again? This isn't a Blizzard game").build();
     }
 
     private ResponseDTO queue(final RequestDTO request) {
-        final ResponseDTO response = new ResponseDTO();
         final StringBuilder sb = new StringBuilder();
         final Queue mergeQueue = getQueue(request);
 
         if (mergeQueue.size() == 0) {
-            sb.append(String.format("<p>Hey %s, you are the first in line! You can go right ahead! <img src=\"%s\" /></p>", request.getUsername(), "https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/620675/rthumbsup-1486545158.gif"));
+            sb.append(String.format("<p>Hey %s, you are the first in line! You can go right ahead! <img src=\"%s\" /></p>", request.getUsername(),
+                    "https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/620675/rthumbsup-1486545158.gif"));
         } else {
-            sb.append(String.format("<p>Alright alright alright %s! Sit tight, and wait a bit until your turn <img src=\"%s\" /></p>", request.getUsername(), "https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/620675/popcorn-1476892268.gif"));
+            sb.append(String.format("<p>Alright alright alright %s! Sit tight, and wait a bit until your turn <img src=\"%s\" /></p>", request.getUsername(),
+                    "https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/620675/popcorn-1476892268.gif"));
         }
         mergeQueue.add(request.getUsername());
 
-        //sb.append(printQueue());
-        response.setMessage(sb.toString());
-        return response;
+        return ResponseDTO.builder().message(sb.toString()).build();
     }
 
     private String printQueue(final RequestDTO request) {
@@ -115,17 +174,18 @@ public class QueueController {
     //Spagghettio!!!
     private RequestDTO readRequest(final String jsonRequest) {
         Gson gson = new Gson();
-        RequestDTO request = new RequestDTO();
         JsonReader reader = new JsonReader(new StringReader(jsonRequest));
         reader.setLenient(true);
         JsonElement jsonElement = gson.fromJson(reader, JsonElement.class);
-        request.setUsername(((JsonObject) jsonElement).get("item").getAsJsonObject().get("message").getAsJsonObject().get("from").getAsJsonObject().get("name").getAsString());
-        request.setRoom(((JsonObject) jsonElement).get("item").getAsJsonObject().get("room").getAsJsonObject().get("name").getAsString());
-        return request;
+        return RequestDTO.builder()
+                .username(((JsonObject) jsonElement).get("item").getAsJsonObject().get("message").getAsJsonObject().get("from").getAsJsonObject().get("name").getAsString())
+                .room(((JsonObject) jsonElement).get("item").getAsJsonObject().get("room").getAsJsonObject().get("name").getAsString())
+                .build();
     }
+
     //Dirty spaghetti to make a queue per room for rMerge
     private Queue getQueue(RequestDTO request) {
-        if(!queueCollection.containsKey(request.getRoom())){
+        if (!queueCollection.containsKey(request.getRoom())) {
             queueCollection.put(request.getRoom(), new LinkedList<String>());
         }
         return queueCollection.get(request.getRoom());
