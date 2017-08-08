@@ -4,7 +4,7 @@ Simple Spaghetti Spring boot RESTful Webservice to Handle a Merge queue in Hipch
 
 As basically as I can put it, we have a global Queue of Strings in memory, and we can add / remove or query Strings and send a message back to Hipchat.
 
-## Request JSON (of which I'm just using the user's name atm
+## Request JSON 
 ```javascript
 {
     event: 'room_message',
@@ -44,9 +44,7 @@ As basically as I can put it, we have a global Queue of Strings in memory, and w
 There is no CI in place. If you compile a new version of Jeeves Server, send me the generated JAR so I can upload it to AWS.
 
 ## To be developed
-* Change the ul tag for an ol tag
-* Add back a check for /dequeue in order to have only the actual user in line dequeued.
-* Add a /Kick handler to boot queue stragglers 
+* Change the ul tag for an ol tag 
 * Add a simple way of Randomizing Phrases / Messages for Success, failure, and stuff
 * Figure a way to add extra handling depending on the executed message, instead of using different Integration bots in the hipchat room (I think I'm missing a parameter in the incoming JSON)
 * Unspaghettize the GSON parse of the request json.
