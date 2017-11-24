@@ -8,5 +8,6 @@ import lombok.Data;
 public class QueueEntry {
 
     private String username;
+    private String mention;
 
 }
