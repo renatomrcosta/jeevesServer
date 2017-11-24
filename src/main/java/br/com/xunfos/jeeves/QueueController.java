@@ -26,6 +26,21 @@ public class QueueController {
     private final Map<String, Queue> queueCollection = new HashMap<>();
 
     /**
+     * Help is near.
+     *
+     * @param jsonRequest
+     * @return
+     */
+    @RequestMapping(value = "/help", method = RequestMethod.POST)
+    public ResponseDTO help(@RequestBody String jsonRequest) {
+        final RequestDTO request = readRequest(jsonRequest);
+        return ResponseDTO.builder()
+                .message(String.format("My code is <a href=\"%s\"/>here</a>.",
+                        "https://github.com/renatomrcosta/jeevesServer"))
+                .build();
+    }
+
+    /**
      * Emergency nutrition for when you are doing overtime and is out of food.
      *
      * @param jsonRequest
