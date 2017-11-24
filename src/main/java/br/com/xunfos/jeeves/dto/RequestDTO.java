@@ -11,5 +11,6 @@ import lombok.Data;
 public class RequestDTO {
 
     private String username;
+    private String mention;
     private String room;
 }

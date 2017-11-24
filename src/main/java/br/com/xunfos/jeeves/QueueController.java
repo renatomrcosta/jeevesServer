@@ -194,6 +194,7 @@ public class QueueController {
         JsonElement jsonElement = gson.fromJson(reader, JsonElement.class);
         return RequestDTO.builder()
                 .username(((JsonObject) jsonElement).get("item").getAsJsonObject().get("message").getAsJsonObject().get("from").getAsJsonObject().get("name").getAsString())
+                .mention(((JsonObject) jsonElement).get("item").getAsJsonObject().get("message").getAsJsonObject().get("from").getAsJsonObject().get("mention_name").getAsString())
                 .room(((JsonObject) jsonElement).get("item").getAsJsonObject().get("room").getAsJsonObject().get("name").getAsString())
                 .build();
     }
