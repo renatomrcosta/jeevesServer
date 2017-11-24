@@ -96,7 +96,7 @@ public class QueueController {
             sb.append(String.format("<p>%s has merged successfully!</p>", mergingUser.getUsername()));
         }
         if (mergeQueue.size() > 0) {
-            sb.append(String.format("<p>It's %s's turn!</p>", mergeQueue.peek().getMention()));
+            sb.append(String.format("<p>It's @%s's turn!</p>", mergeQueue.peek().getMention()));
         }
         //sb.append(String.format("<p>Good job %s! Here, take this <img src=\"%s\">!</p>", user, "https://dujrsrsgsd3nh.cloudfront.net/img/emoticons/620675/money-1486545160.gif"));
         //sb.append(printQueue());
