@@ -1,3 +1,9 @@
+# NOTICE
+
+This hipchat bot has been deprecated by a fork at https://github.com/boskovisch/jeeves-bot, which ported the behavior to slack.
+
+That Fork has ALSO been deprecated, and now the repo https://github.com/renatomrcosta/jeeves-smugglesworth is the 'de facto' current version of the bot. 
+
 # Jeeves Server
 
 Simple Spaghetti Spring boot RESTful Webservice to Handle a Merge queue in Hipchat.
